@@ -9,7 +9,7 @@ function AllExpenses () {
     <ExpensesOutput
       expenses={expensesCtx.expenses}
       expensesPeriod='Total'
-      fallbackText='No expenses registered within the last 7 days'
+      fallbackText='No expense registered'
     />
   )
 }
