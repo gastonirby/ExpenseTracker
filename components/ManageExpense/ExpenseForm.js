@@ -59,7 +59,7 @@ function ExpenseForm ({
           }
         }
       })
-      return
+      return;
     }
 
     onSubmit(expenseData)
