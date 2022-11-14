@@ -53,14 +53,19 @@ function ManageExpense ({ route, navigation }) {
 
   async function confirmHandler (expenseData) {
     setIsSubmitting(true)
-    if (isEditing) {
-      expensesCtx.updateExpense(editedExpenseId, expenseData)
-      await updateExpense(editedExpenseId, expenseData)
-    } else {
-      const id = await storeExpense(expenseData)
-      expensesCtx.addExpense({ ...expenseData, id: id })
+    try {
+      if (isEditing) {
+        expensesCtx.updateExpense(editedExpenseId, expenseData)
+        await updateExpense(editedExpenseId, expenseData)
+      } else {
+        const id = await storeExpense(expenseData)
+        expensesCtx.addExpense({ ...expenseData, id: id })
+      }
+      navigation.goBack()
+    } catch (error) {
+      setError('Could not save data - please try again later!')
+      setIsSubmitting(false)
     }
-    navigation.goBack()
   }
 
   if (isSubmitting) {

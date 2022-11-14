@@ -8,7 +8,7 @@ export const ExpensesContext = createContext({
   updateExpense: (id, { description, amount, date }) => {}
 })
 
-function expensesReducer (state, action) {
+function expensesReducer (state, action, id) {
   switch (action.type) {
     case 'ADD':
       return [{ ...action.payload, id: id }, ...state]

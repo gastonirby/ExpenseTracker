@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native'
 
 import Input from './Input'
 import Button from '../UI/Button'
@@ -59,7 +65,7 @@ function ExpenseForm ({
           }
         }
       })
-      return;
+      return
     }
 
     onSubmit(expenseData)
@@ -71,56 +77,58 @@ function ExpenseForm ({
     !inputs.description.isValid
 
   return (
-    <View style={styles.form}>
-      <Text style={styles.title}>Your Expense</Text>
-      <View style={styles.inputsRow}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.form}>
+        <Text style={styles.title}>Your Expense</Text>
+        <View style={styles.inputsRow}>
+          <Input
+            style={styles.rowInput}
+            label='Amount'
+            invalid={!inputs.amount.isValid}
+            textInputConfig={{
+              keyboardType: 'decimal-pad',
+              onChangeText: inputChangedHandler.bind(this, 'amount'),
+              value: inputs.amount.value
+            }}
+          />
+          <Input
+            style={styles.rowInput}
+            label='Date'
+            invalid={!inputs.date.isValid}
+            textInputConfig={{
+              placeholder: 'YYYY-MM-DD',
+              maxLength: 10,
+              onChangeText: inputChangedHandler.bind(this, 'date'),
+              value: inputs.date.value
+            }}
+          />
+        </View>
         <Input
-          style={styles.rowInput}
-          label='Amount'
-          invalid={!inputs.amount.isValid}
+          label='Description'
+          invalid={!inputs.description.isValid}
           textInputConfig={{
-            keyboardType: 'decimal-pad',
-            onChangeText: inputChangedHandler.bind(this, 'amount'),
-            value: inputs.amount.value
+            multiline: true,
+            // autoCapitalize: 'none'
+            // autoCorrect: false // default is true
+            onChangeText: inputChangedHandler.bind(this, 'description'),
+            value: inputs.description.value
           }}
         />
-        <Input
-          style={styles.rowInput}
-          label='Date'
-          invalid={!inputs.date.isValid}
-          textInputConfig={{
-            placeholder: 'YYYY-MM-DD',
-            maxLength: 10,
-            onChangeText: inputChangedHandler.bind(this, 'date'),
-            value: inputs.date.value
-          }}
-        />
+        {formIsInvalid && (
+          <Text style={styles.errorText}>
+            Invalid input values - please check your entered data!
+          </Text>
+        )}
+        <View style={styles.buttons}>
+          <Button style={styles.button} mode='flat' onPress={onCancel}>
+            Cancel
+          </Button>
+          <Button style={styles.button} onPress={submitHandler}>
+            {submitButtonLabel}
+          </Button>
+        </View>
       </View>
-      <Input
-        label='Description'
-        invalid={!inputs.description.isValid}
-        textInputConfig={{
-          multiline: true,
-          // autoCapitalize: 'none'
-          // autoCorrect: false // default is true
-          onChangeText: inputChangedHandler.bind(this, 'description'),
-          value: inputs.description.value
-        }}
-      />
-      {formIsInvalid && (
-        <Text style={styles.errorText}>
-          Invalid input values - please check your entered data!
-        </Text>
-      )}
-      <View style={styles.buttons}>
-        <Button style={styles.button} mode='flat' onPress={onCancel}>
-          Cancel
-        </Button>
-        <Button style={styles.button} onPress={submitHandler}>
-          {submitButtonLabel}
-        </Button>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 
